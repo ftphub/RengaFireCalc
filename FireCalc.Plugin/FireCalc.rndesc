@@ -1,0 +1,9 @@
+<RengaPlugin>
+  <Name>FireCalc (ЭФЭР)</Name>
+  <Version>0.5.1.0</Version>
+  <RequiredAPIVersion>2.50</RequiredAPIVersion>
+  <Vendor>kartashov_ma</Vendor>
+  <Copyright>kartashov_ma, 2026</Copyright>
+  <PluginFilename>Renga.FireCalc.dll</PluginFilename>
+  <PluginType>Net8</PluginType>
+</RengaPlugin>

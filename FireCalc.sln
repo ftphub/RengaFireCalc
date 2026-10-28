@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireCalc.Core", "FireCalc.Core\FireCalc.Core.csproj", "{5B3E632A-FE01-496D-A98E-E64D7EF5CF91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireCalc.Plugin", "FireCalc.Plugin\FireCalc.Plugin.csproj", "{99F54D18-2ACB-4331-A77B-C0E1F44F45B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireCalc.Tests", "FireCalc.Tests\FireCalc.Tests.csproj", "{214C01EE-5C50-439A-A7E3-222D502F294B}"
+EndProject
+Global
+ GlobalSection(SolutionConfigurationPlatforms) = preSolution
+  Debug|x64 = Debug|x64
+  Release|x64 = Release|x64
+ EndGlobalSection
+ GlobalSection(ProjectConfigurationPlatforms) = postSolution
+  {5B3E632A-FE01-496D-A98E-E64D7EF5CF91}.Debug|x64.ActiveCfg = Debug|Any CPU
+  {5B3E632A-FE01-496D-A98E-E64D7EF5CF91}.Debug|x64.Build.0 = Debug|Any CPU
+  {5B3E632A-FE01-496D-A98E-E64D7EF5CF91}.Release|x64.ActiveCfg = Release|Any CPU
+  {5B3E632A-FE01-496D-A98E-E64D7EF5CF91}.Release|x64.Build.0 = Release|Any CPU
+  {99F54D18-2ACB-4331-A77B-C0E1F44F45B6}.Debug|x64.ActiveCfg = Debug|x64
+  {99F54D18-2ACB-4331-A77B-C0E1F44F45B6}.Debug|x64.Build.0 = Debug|x64
+  {99F54D18-2ACB-4331-A77B-C0E1F44F45B6}.Release|x64.ActiveCfg = Release|x64
+  {99F54D18-2ACB-4331-A77B-C0E1F44F45B6}.Release|x64.Build.0 = Release|x64
+  {214C01EE-5C50-439A-A7E3-222D502F294B}.Debug|x64.ActiveCfg = Debug|Any CPU
+  {214C01EE-5C50-439A-A7E3-222D502F294B}.Debug|x64.Build.0 = Debug|Any CPU
+  {214C01EE-5C50-439A-A7E3-222D502F294B}.Release|x64.ActiveCfg = Release|Any CPU
+  {214C01EE-5C50-439A-A7E3-222D502F294B}.Release|x64.Build.0 = Release|Any CPU
+ EndGlobalSection
+EndGlobal

@@ -1,0 +1,23 @@
+name: Core calculations (no Renga SDK)
+on:
+  push:
+    paths:
+      - 'FireCalc.Core/**'
+      - 'FireCalc.Tests/**'
+      - '.github/workflows/core-tests.yml'
+  pull_request:
+    paths:
+      - 'FireCalc.Core/**'
+      - 'FireCalc.Tests/**'
+      - '.github/workflows/core-tests.yml'
+jobs:
+  core:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Run independent calculation tests
+        run: dotnet run --project .\FireCalc.Tests\FireCalc.Tests.csproj -c Release
+# Does not build FireCalc.Plugin or validate results inside Renga.

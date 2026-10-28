@@ -1,0 +1,44 @@
+# Build output and environment
+**/bin/
+**/obj/
+_build/
+.vs/
+.idea/
+.vscode/
+TestResults/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.cache
+
+# Renga SDK is vendor-provided and is NOT redistributed in this repository
+sdk/*.dll
+sdk/*.tlb
+sdk/*.winmd
+sdk/*.exe
+sdk/*.zip
+
+# Compiled releases, logs and local exports
+*.dll
+*.pdb
+*.exe
+*.msi
+*.nupkg
+*.snupkg
+FireCalc_build_log.txt
+FireCalc_v*_COMPILED_Windows.zip
+*.rnp
+*.rvt
+*.ifc
+*.ifczip
+*.pilotcfx
+*.xlsx
+*.xls
+*.csv
+*.log
+
+# IDE/OS
+.DS_Store
+Thumbs.db
+Desktop.ini

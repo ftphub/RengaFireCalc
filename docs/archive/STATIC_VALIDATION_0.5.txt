@@ -1,0 +1,10 @@
+Static validation - FireCalc 0.5.0
+XAML: XML well-formed
+Controls: 45 unique names
+Event handlers referenced: 35, all present in C# source
+Help entries: 61 unique entries
+Descriptor: 0.5.0.0; API 2.50
+Known compile typo List.Length: fixed
+Core pump scenario tests added: NOT EXECUTED (no .NET runtime here)
+Windows DLL build: NOT EXECUTED (no Windows/.NET/MSBuild/Renga here)
+Renga port API: NOT RUNTIME VERIFIED

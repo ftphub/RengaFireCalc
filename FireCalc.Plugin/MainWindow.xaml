@@ -1,0 +1,458 @@
+<Window x:Class="FireCalc.Plugin.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:FireCalc.Plugin"
+        Language="ru-RU"
+        Title="Renga FireCalc 0.5.1 — ЭФЭР"
+        Width="1100" Height="640" MinWidth="620" MinHeight="360"
+        WindowStartupLocation="CenterScreen" Background="#F5F5F7" FontFamily="Segoe UI" FontSize="13" Foreground="#1C1C1E"
+        Loaded="Window_Loaded">
+  <Window.Resources>
+    <local:HelpTooltipConverter x:Key="HelpTooltipConverter"/>
+    <SolidColorBrush x:Key="BaseBorder" Color="#E4E4E9"/>
+    <SolidColorBrush x:Key="MutedText" Color="#72727A"/>
+    <SolidColorBrush x:Key="AccentBlue" Color="#1769CC"/>
+
+    <Style TargetType="ToolTip">
+      <Setter Property="MaxWidth" Value="450"/>
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="BorderBrush" Value="#D9E2F0"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="11"/>
+      <Setter Property="ContentTemplate">
+        <Setter.Value><DataTemplate><TextBlock Text="{Binding}" TextWrapping="Wrap" FontSize="12" Foreground="#25252A"/></DataTemplate></Setter.Value>
+      </Setter>
+    </Style>
+    <Style TargetType="DataGridColumnHeader">
+      <Setter Property="ToolTip" Value="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource HelpTooltipConverter}}"/>
+      <Setter Property="ToolTipService.ShowDuration" Value="24000"/>
+    </Style>
+    <Style TargetType="Button">
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="Foreground" Value="#25252A"/>
+      <Setter Property="BorderBrush" Value="#D6D6DC"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="12,7"/>
+      <Setter Property="Margin" Value="0,0,8,6"/>
+      <Setter Property="MinHeight" Value="32"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="ToolTip" Value="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource HelpTooltipConverter}}"/>
+      <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+      <Setter Property="ToolTipService.ShowDuration" Value="24000"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="Chrome" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8" SnapsToDevicePixels="True">
+              <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Opacity" Value="0.85"/></Trigger>
+              <Trigger Property="IsPressed" Value="True"><Setter TargetName="Chrome" Property="Opacity" Value="0.72"/></Trigger>
+              <Trigger Property="IsEnabled" Value="False"><Setter TargetName="Chrome" Property="Opacity" Value="0.45"/><Setter Property="Cursor" Value="Arrow"/></Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="#1769CC"/>
+      <Setter Property="Foreground" Value="#FFFFFF"/>
+      <Setter Property="BorderBrush" Value="#1769CC"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    <Style x:Key="FieldLabel" TargetType="TextBlock">
+      <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}, Converter={StaticResource HelpTooltipConverter}}"/>
+      <Setter Property="ToolTipService.ShowDuration" Value="24000"/>
+      <Setter Property="Foreground" Value="#60606A"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+    <Style x:Key="CardTitle" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="16"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Margin" Value="0,0,0,8"/>
+    </Style>
+    <Style x:Key="Card" TargetType="Border">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="BorderBrush" Value="{StaticResource BaseBorder}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Padding" Value="14"/>
+    </Style>
+    <Style TargetType="TextBox">
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="Foreground" Value="#25252A"/>
+      <Setter Property="BorderBrush" Value="#D9D9DF"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="9,6"/>
+      <Setter Property="Margin" Value="0,3,0,7"/>
+      <Setter Property="MinHeight" Value="30"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style TargetType="TabItem">
+      <Setter Property="Padding" Value="13,9"/>
+      <Setter Property="Margin" Value="0,0,5,0"/>
+      <Setter Property="Foreground" Value="#575760"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="TabItem">
+            <Border x:Name="TabChrome" Background="Transparent" BorderBrush="Transparent" BorderThickness="1" CornerRadius="9">
+              <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="TabChrome" Property="Background" Value="White"/>
+                <Setter TargetName="TabChrome" Property="BorderBrush" Value="#E1E1E6"/>
+                <Setter Property="Foreground" Value="#1D1D1F"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+              </Trigger>
+              <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="TabChrome" Property="Opacity" Value="0.75"/></Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="MetricRowStyle" TargetType="DataGridRow">
+      <Setter Property="ToolTip" Value="{Binding Help}"/>
+      <Setter Property="ToolTipService.ShowDuration" Value="24000"/>
+    </Style>
+    <Style TargetType="DataGrid">
+      <Setter Property="ToolTipService.ShowDuration" Value="24000"/>
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="RowHeaderWidth" Value="0"/>
+      <Setter Property="RowHeight" Value="30"/>
+      <Setter Property="ColumnHeaderHeight" Value="33"/>
+      <Setter Property="AlternatingRowBackground" Value="#FAFAFC"/>
+      <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+      <Setter Property="HorizontalGridLinesBrush" Value="#F0F0F3"/>
+      <Setter Property="VerticalGridLinesBrush" Value="#F0F0F3"/>
+      <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+      <Setter Property="CanUserResizeColumns" Value="True"/>
+    </Style>
+  </Window.Resources>
+
+  <DockPanel Margin="14" LastChildFill="True">
+    <Grid DockPanel.Dock="Top" Margin="4,1,4,10">
+      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+      <StackPanel>
+        <TextBlock Text="FireCalc / ЭФЭР" FontSize="23" FontWeight="SemiBold" Foreground="#1C1C1E"/>
+        <TextBlock Text="Renga 9.3 · Запасы воды и ПО · Расчёт трассы · BIM-свойства" FontSize="12" Foreground="{StaticResource MutedText}" Margin="0,2,0,0"/>
+      </StackPanel>
+      <Border Grid.Column="1" Background="#E8F0FE" Padding="10,5" CornerRadius="14" VerticalAlignment="Center">
+        <TextBlock Text="Локальный модуль · v0.5.1" FontSize="11" Foreground="#1558A4"/>
+      </Border>
+    </Grid>
+
+    <Border DockPanel.Dock="Bottom" Background="#E9EFF8" BorderBrush="#DBE4F1" BorderThickness="1" CornerRadius="9" Padding="10,7" Margin="0,8,0,0" MaxHeight="55">
+      <TextBlock x:Name="StatusText" Text="Готово. Выберите нужный раздел." Foreground="#42536B" FontSize="12" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+    </Border>
+
+    <TabControl x:Name="MainTabs" BorderThickness="0" Background="#F5F5F7" Padding="0" FontSize="13">
+      <TabItem Header="Запасы воды и ПО">
+        <Grid Margin="0,9,0,0">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="290"/><ColumnDefinition Width="10"/><ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Border Grid.Column="0" Style="{StaticResource Card}">
+            <DockPanel LastChildFill="True">
+              <StackPanel DockPanel.Dock="Top" Margin="0,0,0,6">
+                <TextBlock Text="Исходные данные" Style="{StaticResource CardTitle}"/>
+                <TextBlock Text="Примеры ЭФЭР" Style="{StaticResource FieldLabel}" Margin="0,0,0,6"/>
+                <WrapPanel>
+                  <Button Content="Окрасочный" Click="Painting_Click"/>
+                  <Button Content="Ремонтный" Click="Repair_Click"/>
+                </WrapPanel>
+              </StackPanel>
+              <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" PanningMode="VerticalOnly">
+                <StackPanel Margin="0,0,7,7">
+                  <TextBlock Text="Время тушения, мин" Style="{StaticResource FieldLabel}"/><TextBox x:Name="SuppressionMinutesBox" TextChanged="ReserveInputs_TextChanged"/>
+                  <TextBlock Text="Расход раствора ПО, л/с" Style="{StaticResource FieldLabel}"/><TextBox x:Name="SolutionFlowBox" TextChanged="ReserveInputs_TextChanged"/>
+                  <TextBlock Text="Концентрация ПО, %" Style="{StaticResource FieldLabel}"/><TextBox x:Name="ConcentrationBox" TextChanged="ReserveInputs_TextChanged"/>
+                  <TextBlock Text="Время охлаждения, мин" Style="{StaticResource FieldLabel}"/><TextBox x:Name="CoolingMinutesBox" TextChanged="ReserveInputs_TextChanged"/>
+                  <TextBlock Text="Расход охлаждения, л/с" Style="{StaticResource FieldLabel}"/><TextBox x:Name="CoolingFlowBox" TextChanged="ReserveInputs_TextChanged"/>
+                  <TextBlock Text="Wтр — объём труб ПО, м³" Style="{StaticResource FieldLabel}"/><TextBox x:Name="FoamPipeVolumeBox" TextChanged="ReserveInputs_TextChanged"/>
+                  <TextBlock Text="Объём сухотруба, м³" Style="{StaticResource FieldLabel}"/><TextBox x:Name="DryPipeVolumeBox" TextChanged="ReserveInputs_TextChanged"/>
+                  <TextBlock Text="Ёмкость бака-дозатора, м³" Style="{StaticResource FieldLabel}"/><TextBox x:Name="TankVolumeBox" TextChanged="ReserveInputs_TextChanged"/>
+                  <TextBlock Text="Wтр и сухотруб — разные показатели. Общий объём труб не подставляется автоматически." TextWrapping="Wrap" Foreground="#A46B1C" FontSize="12"/>
+                </StackPanel>
+              </ScrollViewer>
+            </DockPanel>
+          </Border>
+          <Border Grid.Column="2" Style="{StaticResource Card}">
+            <DockPanel LastChildFill="True">
+              <StackPanel DockPanel.Dock="Top" Margin="0,0,0,6">
+                <TextBlock Text="Результаты" Style="{StaticResource CardTitle}"/>
+                <WrapPanel>
+                  <Button Content="Рассчитать" Click="Calculate_Click" Style="{StaticResource PrimaryButton}"/>
+                  <Button x:Name="ReserveExportButton" Content="Экспорт XLSX" Click="Export_Click" IsEnabled="False"/>
+                </WrapPanel>
+                <TextBlock Text="Методика из Excel ЭФЭР. Итоги PDF имеют расхождения." ToolTip="Исходный PDF РУП.Т содержит округления и расхождения с Excel. Пример расчёта не должен автоматически подтверждать нормативную корректность." FontSize="12" Foreground="#A46B1C" TextWrapping="Wrap" Margin="0,0,0,5"/>
+              </StackPanel>
+              <DataGrid x:Name="MetricsGrid" RowStyle="{StaticResource MetricRowStyle}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserSortColumns="False" Margin="0">
+                <DataGrid.Columns>
+                  <DataGridTextColumn Header="Показатель" Binding="{Binding Name}" Width="*" MinWidth="175"/>
+                  <DataGridTextColumn Header="Значение" Binding="{Binding Value}" Width="100"/>
+                  <DataGridTextColumn Header="Ед." Binding="{Binding Units}" Width="55"/>
+                </DataGrid.Columns>
+              </DataGrid>
+            </DockPanel>
+          </Border>
+        </Grid>
+      </TabItem>
+
+      <TabItem Header="Гидравлика / трасса">
+        <!-- Entire page scrolls: no hidden or pushed-off table on 720p displays. -->
+        <ScrollViewer x:Name="HydraulicsPageScroll" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" PanningMode="VerticalOnly" Margin="0,8,0,0">
+          <StackPanel Margin="0,1,7,9">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+              <StackPanel>
+                <TextBlock Text="Источник трассы" Style="{StaticResource CardTitle}"/>
+                <WrapPanel>
+                  <Button Content="ЭФЭР: окрасочный" Click="HydroPainting_Click"/>
+                  <Button Content="ЭФЭР: ремонтный" Click="HydroRepair_Click"/>
+                  <Button Content="Загрузить трубы Renga" Click="HydroFromModel_Click" Style="{StaticResource PrimaryButton}"/>
+                </WrapPanel>
+                <TextBlock x:Name="HydroScenarioText" Text="Выберите пример или трубы из модели." Foreground="#1769CC" FontWeight="SemiBold" TextWrapping="Wrap" FontSize="12"/>
+                <TextBlock x:Name="HydroGuidanceText" Text="В режиме модели инженер задаёт путь, Q и Кт вручную." Foreground="#9A6C2A" TextWrapping="Wrap" FontSize="12" Margin="0,3,0,0"/>
+              </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+              <StackPanel>
+                <DockPanel Margin="0,0,0,7" LastChildFill="True">
+                  <CheckBox x:Name="HydroConfirmationBox" DockPanel.Dock="Right" Checked="HydroConfirmation_Changed" Unchecked="HydroConfirmation_Changed" Margin="9,2,0,0" VerticalAlignment="Center"
+                            Content="Путь и Q/Кт проверены инженером" ToolTip="Подтверждение инженером фактической непрерывности трассы, расходов Q по всем участкам и применимости Кт. Не является автоматической проверкой."/>
+                  <TextBlock Text="Участки расчётной трассы" FontSize="16" FontWeight="SemiBold"/>
+                </DockPanel>
+                <WrapPanel Margin="0,0,0,4">
+                  <Button Content="Копировать ID выбранной трубы" Click="CopyHydroPipeId_Click" ToolTip="Выделите строку трубы ниже, затем нажмите. ID попадёт в буфер обмена. Для демонстрационных участков без ID кнопка не работает."/>
+                </WrapPanel>
+                <TextBlock Text="Выделите строку для копирования ID. Отметьте только последовательные участки; Q и Кт редактируются двойным щелчком." Foreground="{StaticResource MutedText}" TextWrapping="Wrap" FontSize="12" Margin="0,0,0,7"/>
+                <DataGrid x:Name="HydroGrid" Height="260" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
+                          CellEditEnding="HydroGrid_CellEditEnding" Language="ru-RU" Margin="0,0,0,0">
+                  <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Путь" Binding="{Binding Included, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="52"/>
+                    <DataGridTextColumn Header="Участок / объект" Binding="{Binding Name}" Width="*" MinWidth="185" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="ID" Binding="{Binding RengaId}" Width="68" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="L, м" Binding="{Binding LengthM, StringFormat=F3}" Width="74" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Dвн, мм" Binding="{Binding DiameterMm, StringFormat=F2}" Width="81" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Q, л/с" Binding="{Binding FlowLs, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Width="78"/>
+                    <DataGridTextColumn Header="Кт" Binding="{Binding Kt, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Width="90"/>
+                    <DataGridTextColumn Header="v, м/с" Binding="{Binding VelocityMs, StringFormat=F2}" Width="82" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Δh, м" Binding="{Binding LinearLossMeters, StringFormat=F5}" Width="80" IsReadOnly="True"/>
+                  </DataGrid.Columns>
+                </DataGrid>
+              </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+              <StackPanel>
+                <TextBlock Text="Параметры и расчёт" Style="{StaticResource CardTitle}"/>
+                <WrapPanel>
+                  <StackPanel Width="150" Margin="0,0,10,0"><TextBlock Text="Местные потери, %" Style="{StaticResource FieldLabel}"/><TextBox x:Name="HydroLocalBox" TextChanged="HydroSettings_TextChanged" Text="0"/></StackPanel>
+                  <StackPanel Width="150" Margin="0,0,10,0"><TextBlock Text="Потери оборудования, м" Style="{StaticResource FieldLabel}"/><TextBox x:Name="HydroEquipmentBox" TextChanged="HydroSettings_TextChanged" Text="0"/></StackPanel>
+                  <StackPanel Width="150" Margin="0,0,10,0"><TextBlock Text="Напор потребителя, м" Style="{StaticResource FieldLabel}"/><TextBox x:Name="HydroConsumerBox" TextChanged="HydroSettings_TextChanged" Text="0"/></StackPanel>
+                  <StackPanel Width="150"><TextBlock Text="Перепад отметок, м" Style="{StaticResource FieldLabel}"/><TextBox x:Name="HydroElevationBox" TextChanged="HydroSettings_TextChanged" Text="0"/></StackPanel>
+                </WrapPanel>
+                <WrapPanel>
+                  <Button Content="Рассчитать трассу" Click="HydroCalculate_Click" Style="{StaticResource PrimaryButton}"/>
+                  <Button x:Name="HydroExportButton" Content="Экспорт гидравлики XLSX" Click="HydroExport_Click" IsEnabled="False"/>
+                </WrapPanel>
+              </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}">
+              <StackPanel>
+                <TextBlock Text="Итоги и ограничения" Style="{StaticResource CardTitle}"/>
+                <TextBlock x:Name="HydroSummaryText" Text="Расчёт трассы ещё не выполнен." Foreground="#1C1C1E" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                <TextBlock x:Name="HydroReferenceText" Text="Необходима проверка инженером." Foreground="#9A6C2A" TextWrapping="Wrap" FontSize="12" Margin="0,5,0,0"/>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="Трубы / Renga">
+        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" PanningMode="VerticalOnly" Margin="0,8,0,0">
+          <StackPanel Margin="0,1,7,9">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+              <StackPanel>
+                <TextBlock Text="Геометрия и свойства труб" Style="{StaticResource CardTitle}"/>
+                <TextBlock Text="Длина из модели, внутренний диаметр из стиля трубы. Объёмы по участкам — без расчёта распределения расходов." Foreground="{StaticResource MutedText}" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,8"/>
+                <WrapPanel>
+                  <Button Content="Обновить трубы" Click="ReadPipes_Click" Style="{StaticResource PrimaryButton}"/>
+                  <Button Content="Сумму → в сухотруб" Click="UsePipes_Click"/>
+                  <Button Content="Записать объёмы в Renga" Click="Write_Click"/>
+                </WrapPanel>
+                <Button Content="Копировать ID выбранной трубы" Click="CopyPipeId_Click" HorizontalAlignment="Left" ToolTip="Щёлкните по строке трубы в таблице и нажмите для копирования её числового ID. Модель не изменяется."/>
+                <TextBlock Text="Для записи нужна копия проекта. Сумма труб не равна объёму отдельной пожарной системы без подтверждения инженера." Foreground="#9A6C2A" FontSize="12" TextWrapping="Wrap"/>
+              </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}">
+              <DataGrid x:Name="PipesGrid" Height="340" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserSortColumns="False">
+                <DataGrid.Columns>
+                  <DataGridTextColumn Header="ID" Binding="{Binding RengaObjectId}" Width="70"/>
+                  <DataGridTextColumn Header="Труба" Binding="{Binding Name}" Width="*" MinWidth="190"/>
+                  <DataGridTextColumn Header="L, м" Binding="{Binding LengthM, StringFormat=F3}" Width="72"/>
+                  <DataGridTextColumn Header="Dвн, мм" Binding="{Binding InnerDiameterMm, StringFormat=F2}" Width="85"/>
+                  <DataGridTextColumn Header="V, м³" Binding="{Binding InternalVolumeM3, StringFormat=F8}" Width="115"/>
+                  <DataGridTextColumn Header="V, л" Binding="{Binding InternalVolumeLitres, StringFormat=F3}" Width="76"/>
+                  <DataGridTextColumn Header="Статус" Binding="{Binding State}" Width="110"/>
+                  <DataGridTextColumn Header="Источник Dвн" Binding="{Binding DiameterSource}" Width="115"/>
+                </DataGrid.Columns>
+              </DataGrid>
+            </Border>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="Связность / маршруты">
+        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" PanningMode="VerticalOnly" Margin="0,8,0,0">
+          <StackPanel Margin="0,1,7,9">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+              <StackPanel>
+                <TextBlock Text="Диагностика сети Renga" Style="{StaticResource CardTitle}"/>
+                <TextBlock Text="Получаем концы маршрутов и идентификаторы труб через Renga IRouteParams (API 2.50). Это маршрутная связность, а не гидравлическая увязка; материалы, арматура, расходы и направления течения здесь не определяются." TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource MutedText}" Margin="0,0,0,9"/>
+                <WrapPanel>
+                  <Button Content="Проверить маршруты Renga" Click="NetworkScan_Click" Style="{StaticResource PrimaryButton}"/>
+                  <Button Content="Экспорт связности CSV" Click="NetworkExport_Click"/>
+                </WrapPanel>
+                <TextBlock x:Name="NetworkSummaryText" Text="Нажмите «Проверить маршруты Renga»." TextWrapping="Wrap" Margin="0,5,0,7" FontWeight="SemiBold"/>
+                <TextBlock x:Name="NetworkProblemsText" Text="При кольцевых схемах выбор пути не выполняется автоматически." TextWrapping="Wrap" FontSize="12" Foreground="#9A6C2A"/>
+              </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+              <StackPanel>
+                <TextBlock Text="Маршруты и их точки подключения" Style="{StaticResource CardTitle}"/>
+                <TextBlock Text="Выделите маршрут в таблице. Можно скопировать нужный ID или подставить конечные точки в поля расчёта без ручного поиска в модели." Foreground="{StaticResource MutedText}" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                <WrapPanel Margin="0,0,0,5">
+                  <Button Content="Копировать ID маршрута" Click="CopyRouteId_Click"/>
+                  <Button Content="Копировать ID «От»" Click="CopyRouteStartId_Click" ToolTip="Копировать ID объекта в столбце «От объекта» выделенного маршрута."/>
+                  <Button Content="Копировать ID «К»" Click="CopyRouteEndId_Click" ToolTip="Копировать ID объекта в столбце «К объекту» выделенного маршрута."/>
+                  <Button Content="«От» → начало пути" Click="RouteToStart_Click" ToolTip="Подставляет ID «От объекта» в начало пути. Это конец маршрута Renga, но не доказательство направления течения."/>
+                  <Button Content="«К» → конец пути" Click="RouteToEnd_Click" ToolTip="Подставляет ID «К объекту» в конец пути. Проверьте связь с другими маршрутами."/>
+                  <Button Content="«От» → источник" Click="RouteToRoot_Click" ToolTip="Подставляет ID «От объекта» как КАНДИДАТ источника расчёта расходов. Инженер должен проверить, является ли он источником."/>
+                </WrapPanel>
+                <DataGrid x:Name="NetworkGrid" Height="240" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False">
+                  <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID маршрута" Binding="{Binding RouteId}" Width="100"/>
+                    <DataGridTextColumn Header="От объекта" Binding="{Binding SourceObjectId}" Width="100"/>
+                    <DataGridTextColumn Header="К объекту" Binding="{Binding TargetObjectId}" Width="100"/>
+                    <DataGridTextColumn Header="ID стиля системы" Binding="{Binding SystemStyleId}" Width="135"/>
+                    <DataGridTextColumn Header="Q дерева, л/с" Binding="{Binding DerivedFlowLs, StringFormat=F2}" Width="110"/>
+                    <DataGridTextColumn Header="Труб на маршруте" Binding="{Binding PipeCount}" Width="115"/>
+                    <DataGridTextColumn Header="ID труб" Binding="{Binding PipeIds}" Width="*" MinWidth="180"/>
+                  </DataGrid.Columns>
+                </DataGrid>
+              </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+              <StackPanel>
+                <TextBlock Text="Порты оборудования и фитингов" Style="{StaticResource CardTitle}"/>
+                <TextBlock Text="Дополнительная read-only проверка IEntityWithPorts / IPort. Она помогает найти связи маршрутов через оборудование. Порты насоса не являются подтверждением свободного гидравлического протока через него." TextWrapping="Wrap" Foreground="{StaticResource MutedText}" FontSize="12" Margin="0,0,0,7"/>
+                <Button Content="Прочитать порты оборудования" Click="PortScan_Click" HorizontalAlignment="Left" ToolTip="Проверяет подключённые порты оборудования к маршрутам через Renga API без изменения модели."/>
+                <TextBlock x:Name="PortSummaryText" Text="Диагностика портов ещё не выполнялась." FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,3,0,6"/>
+                <WrapPanel Margin="0,0,0,5">
+                  <Button Content="Копировать ID объекта" Click="CopyPortObjectId_Click" ToolTip="Копирует ID объекта из выделенной строки таблицы портов, без поиска в модели."/>
+                  <Button Content="Копировать ID маршрута" Click="CopyPortRouteId_Click" ToolTip="Копирует ID подключённого маршрута выделенного порта."/>
+                  <Button Content="Добавить ID насоса из строки" Click="AddPumpIdFromPort_Click" ToolTip="Добавляет ID выделенного объекта с названием «Насос» в поле сценария, не меняя режим работы и не рассчитывая характеристик."/>
+                  <Button Content="Объект → начало" Click="PortToStart_Click" ToolTip="ID выбранного объекта с портами → начало пути (не определяет направление потока)."/>
+                  <Button Content="Объект → конец" Click="PortToEnd_Click" ToolTip="ID выбранного объекта с портами → конец пути."/>
+                  <Button Content="Объект → источник" Click="PortToRoot_Click" ToolTip="ID выбранного объекта с портами → кандидат источника; инженер обязан подтвердить назначение."/>
+                </WrapPanel>
+                <DataGrid x:Name="PortGrid" Height="160" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False">
+                  <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID объекта" Binding="{Binding ObjectId}" Width="90"/>
+                    <DataGridTextColumn Header="Оборудование / фитинг" Binding="{Binding ObjectName}" Width="*" MinWidth="160"/>
+                    <DataGridTextColumn Header="№ порта" Binding="{Binding PortIndex}" Width="75"/>
+                    <DataGridTextColumn Header="Имя порта" Binding="{Binding PortName}" Width="120"/>
+                    <DataGridTextColumn Header="Подключённый маршрут" Binding="{Binding RouteId}" Width="150"/>
+                    <DataGridTextColumn Header="Направление порта" Binding="{Binding FlowDirection}" Width="140"/>
+                  </DataGrid.Columns>
+                </DataGrid>
+                <TextBlock x:Name="PortDetailText" Text="Проверка не выполнялась." Foreground="#9A6C2A" TextWrapping="Wrap" FontSize="12" Margin="0,7,0,0"/>
+              </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+              <StackPanel>
+                <TextBlock Text="Режим насосов (задаёт инженер)" Style="{StaticResource CardTitle}"/>
+                <TextBlock Text="Выбор режима НЕ является подбором насосов. Без их паспортных кривых Q–H и проверки обвязки автоматический расчёт совместной работы запрещён." Foreground="{StaticResource MutedText}" TextWrapping="Wrap" FontSize="12"/>
+                <WrapPanel Margin="0,8,0,0">
+                  <StackPanel Width="260" Margin="0,0,12,0">
+                    <TextBlock Text="Режим насосов" Style="{StaticResource FieldLabel}"/>
+                    <ComboBox x:Name="PumpModeBox" ToolTip="Режим работы насосов задаёт проектировщик. Не известно из одной геометрии BIM." SelectedIndex="0" Height="32">
+                      <ComboBoxItem Content="Не задан"/>
+                      <ComboBoxItem Content="Рабочий + резервный"/>
+                      <ComboBoxItem Content="Два рабочих одновременно"/>
+                      <ComboBoxItem Content="Ручной сценарий"/>
+                    </ComboBox>
+                  </StackPanel>
+                  <StackPanel Width="240">
+                    <TextBlock Text="ID насосов" Style="{StaticResource FieldLabel}"/>
+                    <TextBox x:Name="PumpIdBox" ToolTip="Введите ID объектов насосов, например: 100005;100006. Уточните назначения и паспортные характеристики у инженера."/>
+                  </StackPanel>
+                </WrapPanel>
+                <Button Content="Сценарий насосов" Click="PumpSave_Click" HorizontalAlignment="Left"/>
+                <TextBlock x:Name="PumpScenarioText" Text="Режим не задан. Никакие характеристики насосов не назначены автоматически." TextWrapping="Wrap" Foreground="#9A6C2A" FontSize="12"/>
+              </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}">
+              <StackPanel>
+                <TextBlock Text="Найти единственный путь" Style="{StaticResource CardTitle}"/>
+                <TextBlock Text="Впишите ID конечных объектов из столбцов выше. Для разветвлённой сети укажите нужные концы. Если между ними несколько путей или часть трассы без труб — подбор блокируется." FontSize="12" TextWrapping="Wrap" Foreground="{StaticResource MutedText}" Margin="0,0,0,8"/>
+                <WrapPanel>
+                  <StackPanel Width="165" Margin="0,0,12,0"><TextBlock Text="ID начального объекта" Style="{StaticResource FieldLabel}"/><TextBox x:Name="NetworkStartBox"/></StackPanel>
+                  <StackPanel Width="165" Margin="0,0,12,0"><TextBlock Text="ID конечного объекта" Style="{StaticResource FieldLabel}"/><TextBox x:Name="NetworkEndBox"/></StackPanel>
+                </WrapPanel>
+                <Button Content="Подставить найденные трубы в гидравлику" Click="NetworkPath_Click" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left"/>
+                <TextBlock x:Name="NetworkPathText" Text="Найденный путь не задаёт Q и Кт: их должен проверить инженер." TextWrapping="Wrap" Foreground="#9A6C2A" FontSize="12"/>
+                <Border BorderBrush="#E4E4E9" BorderThickness="0,1,0,0" Margin="0,14,0,8"/>
+                <TextBlock Text="Расходы в древовидной сети (один источник)" Style="{StaticResource CardTitle}"/>
+                <TextBlock Text="Сначала проверьте, что схема — дерево и в ней один источник. Впишите ID источника и расходы ВСЕХ конечных потребителей. Формат: ID=Q, несколько пар через точку с запятой. Пример: 1201=40;1202=40. Это расходы потребителей, не подбор по нормативам." TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource MutedText}"/>
+                <StackPanel Width="210" HorizontalAlignment="Left">
+                  <TextBlock Text="ID источника" Style="{StaticResource FieldLabel}"/>
+                  <TextBox x:Name="NetworkRootBox"/>
+                </StackPanel>
+                <TextBlock Text="Потребители: ID=Q л/с" Style="{StaticResource FieldLabel}"/>
+                <TextBox x:Name="NetworkDemandsBox" Height="60" TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto"/>
+                <Button Content="Распределить расходы по дереву" Click="NetworkFlow_Click" HorizontalAlignment="Left" Style="{StaticResource PrimaryButton}"/>
+                <TextBlock x:Name="NetworkFlowText" Text="При циклах и неполных данных распределение заблокировано." TextWrapping="Wrap" FontSize="12" Foreground="#9A6C2A"/>
+                <TextBlock Text="Важно: вычисление расходов не выполняет гидравлическую увязку, не определяет напор насосов и не заменяет подбор оборудования. Для использования в расчёте после выбора пути проверьте Q каждого участка и заполните Кт." TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource MutedText}" Margin="0,7,0,0"/>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="Подсказки и формулы" ToolTip="Справочник обозначений, единиц, исходных формул и ограничений расчёта.">
+        <Grid Margin="0,8,0,0">
+          <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+          <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+            <StackPanel>
+              <TextBlock Text="Инженерный справочник FireCalc" Style="{StaticResource CardTitle}"/>
+              <TextBlock Text="Наведите курсор на подписи полей, значения результатов, кнопки или заголовки таблиц: откроется подсказка. Ниже можно найти обозначение и прочитать формулу целиком." Foreground="{StaticResource MutedText}" TextWrapping="Wrap" FontSize="12"/>
+              <TextBlock Text="Формулы запасов соответствуют предоставленному Excel ЭФЭР. Гидравлическая формула Кт соответствует примеру РУП.Т, но не заменяет нормативный расчёт. Связи портов не доказывают возможность гидравлического протока через насос или фитинг." Foreground="#9A6C2A" TextWrapping="Wrap" Margin="0,8,0,0" FontSize="12"/>
+              <TextBox x:Name="HelpSearchBox" TextChanged="HelpSearch_TextChanged" ToolTip="Введите обозначение, единицу измерения или часть формулы для поиска по словарю." Margin="0,10,0,0"/>
+            </StackPanel>
+          </Border>
+          <Border Grid.Row="1" Style="{StaticResource Card}">
+            <DataGrid x:Name="HelpGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserSortColumns="False">
+              <DataGrid.Columns>
+                <DataGridTextColumn Header="Обозначение / формула" Binding="{Binding Key}" Width="220"/>
+                <DataGridTextColumn Header="Объяснение и применение" Binding="{Binding Value}" Width="*" MinWidth="320"/>
+              </DataGrid.Columns>
+            </DataGrid>
+          </Border>
+        </Grid>
+      </TabItem>
+
+      <TabItem Header="Протокол">
+        <Border Style="{StaticResource Card}" Margin="0,8,0,0">
+          <TextBox x:Name="LogBox" AcceptsReturn="True" IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                   TextWrapping="Wrap" Background="White" Margin="0"/>
+        </Border>
+      </TabItem>
+    </TabControl>
+  </DockPanel>
+</Window>

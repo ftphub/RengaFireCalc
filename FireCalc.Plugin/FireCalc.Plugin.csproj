@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework><UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget><Platforms>x64</Platforms>
+    <AssemblyName>Renga.FireCalc</AssemblyName><RootNamespace>FireCalc.Plugin</RootNamespace>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
+    <OutputPath>..\_build\FireCalc\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup><ProjectReference Include="..\FireCalc.Core\FireCalc.Core.csproj" /></ItemGroup>
+  <ItemGroup>
+    <Reference Include="Renga.NET8.PluginUtility">
+      <HintPath>..\sdk\Renga.NET8.PluginUtility.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <COMFileReference Include="..\sdk\RengaCOMAPI.tlb">
+      <WrapperTool>tlbimp</WrapperTool><Isolated>False</Isolated><EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMFileReference>
+  </ItemGroup>
+  <ItemGroup><None Include="FireCalc.rndesc" CopyToOutputDirectory="PreserveNewest" /></ItemGroup>
+</Project>
